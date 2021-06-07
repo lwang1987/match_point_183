@@ -1,0 +1,67 @@
+@charset "utf-8";
+
+// Import a Google Font
+@import url('https://fonts.googleapis.com/css?family=Nunito:400,700');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans');
+
+// Set your brand colors
+$purple: #8A4D76;
+$pogblue: #041893;
+$pink: #FA7C91;
+$brown: #757763;
+$beige-light: #D0D1CD;
+$beige-lighter: #EFF0EB;
+$light-grey-opaque: #484848b5;
+$light-grey: #484848;
+$dark-grey: #383838;
+$dark-blue-epic: #1f4c95c7;
+$ultra-red: rgb(200, 0, 0);
+$burgundy: #a62626b5;
+
+// Update Bulma's global variables
+$family-sans-serif: 'Noto Sans', sans-serif;
+$grey-dark: $brown;
+$grey-light: $beige-light;
+$primary: $purple;
+$info: $dark-blue-epic;
+$danger: $ultra-red;
+$warning: $burgundy;
+
+// Update some of Bulma's component variables
+$title-color: white;
+$body-background-color: $beige-lighter;
+$control-border-width: 2px;
+$input-border-color: transparent;
+$input-shadow: none;
+$footer-background-color: transparent;
+$input-placeholder-color: white;
+$input-background-color: $light-grey-opaque;
+$table-background-color: $light-grey;
+$table-head-background-color: $dark-grey;
+$table-color: white;
+$table-head-cell-color: white;
+$input-color: white;
+$label-color: white;
+$table-head-color: transparent;
+
+
+html {
+    background: url("../test.png");
+    background-position: center center; background-repeat: no-repeat; background-attachment: fixed; background-size: cover;
+}
+
+figcaption {
+    background-color: transparent;
+    color: white;
+    display: block;
+    position: absolute;
+    top: 0;
+    font-size: 40px;
+  }
+  
+  figure {
+    position: relative;
+  }
+
+@import "bulma-0.9.2/bulma.sass";
+@import "bulma-carousel/src/sass/index.sass";

@@ -1,0 +1,115 @@
+[[extend 'layout.html']]
+
+<div class="section">
+    <div class="container">
+
+ 
+
+        <div class="block"></div>
+          <section class="hero is-large has-carousel has-text-white">
+            <!-- Start Carousel 
+            https://stackoverflow.com/questions/51531920/carousel-using-bulma-css-framework and Bulma Carousel documentation: https://bulma-carousel.onrender.com/
+             End Carousel -->
+            <div class="hero-head"></div>
+            <div class="hero-body">
+              <div id="carousel" class="hero-carousel">
+                <div class="item-1">
+                  <figure class="image is-2by1 is-covered">
+                    <a href="https://r6.tracker.network">
+                      <img
+                        src="https://cdn.thetrackernetwork.com/cdn/fm/B321r6siege.jpg"
+                        alt=""
+                      />
+                    </a>
+                    <figcaption><p class="has-text-weight-medium">GET YOUR FULL R6 STATS HERE</p></figcaption>
+                  </figure>
+                </div>
+                <div class="item-2">
+                  <figure class="image is-covered">
+                    <a href="https://www.ubisoft.com/en-us/game/rainbow-six/siege">
+                      <img
+                      src="https://cdn2.unrealengine.com/r6s-y6-epic-std-edition-thumbnail-1920x1080-1920x1080-2c05b2513054.jpg" alt=""/>
+                    </a>
+                  </figure>
+                </div>
+                <div class="item-3">
+                  <figure class="image is-covered">
+                    <a href="https://learn-py4web.github.io">
+                      <img
+                      src="learnpy4web.png" alt=""/>
+                    </a>
+                  </figure>
+                </div>
+              </div>
+            </div>
+            <div class="hero-foot"></div>
+          </div>
+        </div>
+  
+    </div>
+    <div class="container">
+        <table class="table is-fullwidth">
+            <thead>
+                <tr>
+                    <th class="has-text-weight-bold has-text-white is-size-2">GAMES</th>
+                    <th></th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                [[for game in games:]]
+                <tr>   
+                    <td>
+                        <a href="[[=URL('check_match',game.id,signer=url_signer)]]">
+                            <span>
+                                [[=(game.title)]]
+                            </span>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a class = "button is-danger" href="[[=URL('delete_game', game.id, signer=url_signer)]]">
+                            <span class="icon"><i class="fa fa-fw fa-trash"></i></span>
+                        </a>
+                    </td>
+                </tr>
+                [[pass]]
+            </tbody>
+        </table>
+    </div>
+    <div class="container">
+        <table class="table is-fullwidth">
+            <thead>
+                <tr>
+                    <th class="has-text-weight-bold has-text-white is-size-2">SHARED GAMES</th>
+                </tr>
+            </thead>
+            <tbody>
+                [[for sgame in shared_games:]]
+                <tr>
+                    <td>
+                        <a href="[[=URL('check_match',sgame.game_id,signer=url_signer)]]">
+                            <span>
+                                [[=(sgame.game_title)]]
+                            </span>
+                        </a>
+                    </td>
+                </tr>
+                [[pass]]
+            </tbody>
+        </table>
+    </div>
+
+
+    <div class="container">
+        <a class="button is-success" href="[[=URL('create_game', signer=url_signer)]]">
+            <span class="icon"><i class="fa fa-plus"></i></span> <span>Create a new match!</span>
+        </a>
+        
+    </div>
+</div>
+[[block page_scripts]]
+<script src="mybulma/bulma-carousel/dist/js/bulma-carousel.min.js"></script>
+<script src="mybulma/script.js"></script>
+[[end]]
+

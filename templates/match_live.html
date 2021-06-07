@@ -1,0 +1,117 @@
+[[extend 'layout.html']]
+<style>
+    [v-cloak] {
+         display: none;
+    }
+</style>
+
+<div class="section" id="vue-target" v-cloak>
+    <!------------------------------------------------------>
+    <div class="container block">
+        <div class="columns">
+            <div class="column is-half">
+                    <table class="table is-fullwidth has-background-info">
+                        <span class="title has-text-centered is-size-1 has-text-weight-bold"><p>[[=team1name]]</p></span>
+
+                        <thead class="has-background-info">
+                            <th>Player</th>
+                            <th>Kills</th>
+                            <th>Assists</th>
+                            <th>Deaths</th>
+                            <th>P/D</th>
+                            <th>Clutch</th>
+                        </thead>
+                        <tbody class="has-background-info">
+                            <tr v-for="r in t1rows">
+                                <td>{{r.player_name}}</td>
+
+                                <td v-for="fn in ['kills','assists','deaths','plant_defuse','clutch']">
+                                    <div class="control" :class="{'is-loading': r._state[fn] === 'pending'}" >
+                                        <input type="number" class="input" v-model="r[fn]"
+                                            :class="{
+                                                'is-focused': r._state[fn] === 'edit',
+                                                'is-static': r._state[fn] === 'clean',
+                                            }"
+                                            :readonly="r._state[fn] === 'clean'"
+                                            @click="start_edit_tstat(r._idx, fn, 1)"
+                                            @blur="stop_edit_tstat(r._idx, fn, 1)"
+                                        />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr v-for="idx in [5,4,3,2,1]">
+                                <td v-if="idx > t1len">&nbsp;</td>
+                                <td v-if="idx > t1len"></td>
+                                <td v-if="idx > t1len"></td>
+                                <td v-if="idx > t1len"></td>
+                                <td v-if="idx > t1len"></td>
+                                <td v-if="idx > t1len"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+            </div>
+
+            <div class="column is-half">
+                    <table class="table is-fullwidth has-background-warning">
+                        <span class="title has-text-centered is-size-1 has-text-weight-bold"><p>[[=team2name]]</p></span>
+
+                        <thead class="has-background-warning">
+                            <th>Player</th>
+                            <th>Kills</th>
+                            <th>Assists</th>
+                            <th>Deaths</th>
+                            <th>P/D</th>
+                            <th>Clutch</th>
+                        </thead>
+                        <tbody class="has-background-warning">
+                            <tr v-for="r in t2rows">
+                                <td>{{r.player_name}}</td>
+
+                                <td v-for="fn in ['kills','assists','deaths','plant_defuse','clutch']">
+                                    <div class="control" :class="{'is-loading': r._state[fn] === 'pending'}" >
+                                        <input type="number" class="input" v-model="r[fn]"
+                                            :class="{
+                                                'is-focused': r._state[fn] === 'edit',
+                                                'is-static': r._state[fn] === 'clean',
+                                            }"
+                                            :readonly="r._state[fn] === 'clean'"
+                                            @click="start_edit_tstat(r._idx, fn, 2)"
+                                            @blur="stop_edit_tstat(r._idx, fn, 2)"
+                                        />
+                                    </div>
+                                </td>
+                               
+                            </tr>
+                            <tr v-for="idx in [5,4,3,2,1]">
+                                    <td v-if="idx > t2len">&nbsp;</td>
+                                    <td v-if="idx > t2len"></td>
+                                    <td v-if="idx > t2len"></td>
+                                    <td v-if="idx > t2len"></td>
+                                    <td v-if="idx > t2len"></td>
+                                    <td v-if="idx > t2len"></td>
+                                </span>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <a class="button is-primary is-pulled-right" href="[[=URL('index')]]">
+                        <p>Finished</p>
+                    </a>
+            </div>   
+        </div>
+    </div>
+
+</div>
+
+[[block page_scripts]]
+<script>
+    let game_id = "[[=game_id]]";
+    let team1id = "[[=team1id]]";
+    let team2id = "[[=team2id]]";
+    let team1name = "[[=team1name]]";
+    let team2name = "[[=team2name]]";
+    let load_players_url = "[[=XML(load_players_url)]]";
+    let edit_tstat_url = "[[=XML(edit_tstat_url)]]";
+    let fetch_player_url = "[[=XML(fetch_player_url)]]";
+</script>
+<script src="js/match_live.js"></script>
+[[end]]
