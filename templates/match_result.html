@@ -1,0 +1,113 @@
+[[extend 'layout.html']]
+<style>
+    [v-cloak] {
+         display: none;
+    }
+</style>
+
+<div class="section">
+    <!------------------------------------------------------>
+    <div class="container block">
+        <div class="columns">
+            <div class="column is-half">
+                    <table class="table is-fullwidth">
+                        <span class="title has-text-centered is-size-1 has-text-weight-bold"><p>[[=team1name]]</p></span>
+
+                        <tr class="has-background-link">
+                            <th>Player</th>
+                            <th>Kills</th>
+                            <th>Assists</th>
+                            <th>Deaths</th>
+                            <th>P/D</th>
+                            <th>Clutch</th>
+                        </tr>
+                        [[for p1 in team1:]]
+                        <tr class="has-background-link">
+                            <td>[[=p1.player_name]]</td>
+                            <td>[[=p1.kills]]</td>
+                            <td>[[=p1.assists]]</td>
+                            <td>[[=p1.deaths]]</td>
+                            <td>[[=p1.plant_defuse]]</td>
+                            <td>[[=p1.clutch]]</td>
+                        </tr>
+                        [[pass]]
+                    </table>
+                    <div class="container block is-pulled-left">
+                        <script type="text/javascript">
+                        function post_email()
+                        {
+                            let game_id = "[[=game_id]]";
+                            let game_title = "[[=game_title]]";
+
+                            var email = document.getElementById("enter_email").value;
+                            axios.post(share_email_url,
+                            {
+                                game_id: game_id,
+                                game_title: game_title,
+                                value: email, 
+                            });
+                            alert("This game has been shared with " +email);
+                        }
+                        </script>
+                        <div class="control":class="{'is-loading': email_state === 'pending'}">
+                            <input id="enter_email" type="email" class="input has-text-centered is-size-5 has-text-weight-bold has-text-white" v-model="email"
+                            :class="{
+                                'is-focused':  email_state === 'edit',
+                                'is-static': email_state === 'clean',
+                            }"
+                            :readonly="email_state === 'clean'"
+                            @click="start_edit_email()"
+                            @blur="stop_edit_email()"/>
+                        </div>
+                    </div>
+                    <a class="button is-primary is-pulled-left" onclick = "post_email()" >
+                        <p>Share</p>
+                    </a>
+            </div>
+
+            <div class="column is-half">
+                    <table class="table is-fullwidth">
+                        <span class="title has-text-centered is-size-1 has-text-weight-bold"><p>[[=team2name]]</p></span>
+
+                        <thead class="has-background-danger">
+                            <th>Player</th>
+                            <th>Kills</th>
+                            <th>Assists</th>
+                            <th>Deaths</th>
+                            <th>P/D</th>
+                            <th>Clutch</th>
+                        </thead>
+                        [[for p2 in team2:]]
+
+                        <tbody class="has-background-danger">
+                            <tr>
+                                <td>[[=p2.player_name]]</td>
+                                <td>[[=p2.kills]]</td>
+                                <td>[[=p2.assists]]</td>
+                                <td>[[=p2.deaths]]</td>
+                                <td>[[=p2.plant_defuse]]</td>
+                                <td>[[=p2.clutch]]</td>
+                            </tr>                               
+                        </tbody>
+                        [[pass]]
+                    </table>
+                    <a class="button is-primary is-pulled-right" href="[[=URL('index')]]">
+                        <p>Back</p>
+                    </a>
+            </div>   
+        </div>
+    </div>
+
+</div>
+
+[[block page_scripts]]
+<script>
+    let game_id = "[[=game_id]]";
+    let team1id = "[[=team1id]]";
+    let team2id = "[[=team2id]]";
+    let share_email_url = "[[=XML(share_email_url)]]";
+    let team1name = "[[=team1name]]";
+    let team2name = "[[=team2name]]";
+</script>
+<script src="js/index.js"></script>
+[[end]]

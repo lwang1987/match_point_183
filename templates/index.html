@@ -1,0 +1,224 @@
+[[extend 'layout.html']]
+<style>
+    [v-cloak] {
+         display: none;
+    }
+</style>
+
+<div class="section" id="vue-target" v-cloak>
+    <!------------------------------------------------------>
+    <div class="container block">
+        <div class="columns">
+            <div class="column is-half">
+                    <table class="table is-fullwidth has-background-info">
+                        <div class="container block">
+                            <div class="control":class="{'is-loading': team1_state === 'pending'}">
+                                <input type="text" class="input has-text-centered is-size-1 has-text-weight-bold has-text-white" v-model="team1_name"
+                                :class="{
+                                    'is-focused':  team1_state === 'edit',
+                                    'is-static': team1_state === 'clean',
+                                }"
+                                :readonly="team1_state === 'clean'"
+                                @click="start_edit_tname(1)"
+                                @blur="stop_edit_tname(1, [[=team1id]])"/>
+                            </div>
+                        </div>
+
+                        <thead class="has-background-info">
+                            <th>LEVEL</th>
+                            <th></th>
+                            <th>PLAYER</th>
+                            <th>W/L</th>
+                            <th>K/D</th>
+                            <th>HS%</th>
+                            <th></th>
+                        </thead>
+                        <tbody class="has-background-info">
+                            <tr v-for="r in t1rows">
+
+                                <td>{{r.level}}</td>
+                                <td >
+                                    <figure class="image is-48x48">
+                                        <img v-bind:src="r.image">
+                                    </figure>
+                                </td>
+                                <td>{{r.player_name}}</td>
+                                <td>{{r.wl}}</td>
+                                <td>{{r.kd}}</td>
+                                <td>{{r.hs}}</td>
+                                <td><span @click="pop_player(r._idx, 1)" class="icon is-clickable has-text-primary"> <i class="fa fa-minus fa-2x"></i></span>
+                                <span @click="delete_player(r._idx, 1)" class="icon is-clickable has-text-danger-dark is-pulled-right"> <i class="fa fa-remove fa-2x"></i></span></td>
+                            </tr>
+                            <tr v-for="idx in [5,4,3,2,1]">
+                                <td v-if="idx > t1len">&nbsp;</td>
+                                <td v-if="idx > t1len"></td>
+                                <td v-if="idx > t1len"></td>
+                                <td v-if="idx > t1len"></td>
+                                <td v-if="idx > t1len"></td>
+                                <td v-if="idx > t1len"></td>
+                                <td v-if="idx > t1len"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+            </div>
+
+            <div class="column is-half">
+                    <table class="table is-fullwidth has-background-warning">
+                        <div class="container block">
+                            <div class="control":class="{'is-loading': team2_state === 'pending'}">
+                                <input type="text" class="input has-text-centered is-size-1 has-text-weight-bold has-text-white" v-model="team2_name"
+                                :class="{
+                                    'is-focused':  team2_state === 'edit',
+                                    'is-static': team2_state === 'clean',
+                                }"
+                                :readonly="team2_state === 'clean'"
+                                @click="start_edit_tname(2)"
+                                @blur="stop_edit_tname(2, [[=team2id]])"/>
+                            </div>
+                        </div>
+
+                        <thead class="has-background-warning">
+                            <th>LEVEL</th>
+                            <th></th>
+                            <th>PLAYER</th>
+                            <th>W/L</th>
+                            <th>K/D</th>
+                            <th>HS%</th>
+                            <th></th>
+                        </thead>
+                        <tbody class="has-background-warning">
+                            <tr v-for="r in t2rows">
+
+                                <td>{{r.level}}</td>
+                                <td >
+                                    <figure class="image is-48x48">
+                                        <img v-bind:src="r.image">
+                                    </figure>
+                                </td>
+                                <td>{{r.player_name}}</td>
+                                <td>{{r.wl}}</td>
+                                <td>{{r.kd}}</td>
+                                <td>{{r.hs}}</td>
+                                <td><span @click="pop_player(r._idx, 2)" class="icon is-clickable is-pulled-left has-text-success"> <i class="fa fa-minus fa-2x"></i></span>
+                                <span @click="delete_player(r._idx, 2)" class="icon is-clickable has-text-danger-dark is-pulled-right"> <i class="fa fa-remove fa-2x"></i></span></td>
+                            </tr>
+                            <tr v-for="idx in [5,4,3,2,1]">
+                                    <td v-if="idx > t2len">&nbsp;</td>
+                                    <td v-if="idx > t2len"></td>
+                                    <td v-if="idx > t2len"></td>
+                                    <td v-if="idx > t2len"></td>
+                                    <td v-if="idx > t2len"></td>
+                                    <td v-if="idx > t2len"></td>
+                                    <td v-if="idx > t2len"></td>
+                                </span>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+        </div>
+    </div>
+    <!------------------------------------------------------>
+
+    <div v-if="add_mode" class="container block">
+        <div class="title">Add Player</div>
+        <div class="form">
+            <div class="field">
+                <label class="label">Player username:</label>
+                <div class="control">
+                    <input type="text" v-model="player_name" class="input">
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Select Team</label>
+                <div class="select">
+                    <select v-model="inputid">
+                      <option></option>
+                      <option value="[[=team1id]]">{{team1_name}}</option>
+                      <option value="[[=team2id]]">{{team2_name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <input type="submit" @click="add_player([[=game_id]])" value="Add" class="button is-success">
+                    <input type="submit" @click="set_add_mode(false)" value="Cancel" class="button is-danger">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container block">
+        <table class="table">
+            <h1 class="title is-bold">LIST OF PLAYERS</h1>
+            <thead>
+                <tr class="has-text-white">
+                    <th>LEVEL</th>
+                    <th></th>
+                    <th>PLAYER</th>
+                    <th>W/L</th>
+                    <th>K/D</th>
+                    <th>HS%</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tr v-for="r in rows">
+                <td>{{r.level}}</td>
+                <td >
+                    <figure class="image is-48x48">
+                        <img v-bind:src="r.image">
+                    </figure>
+                </td>
+                <td>{{r.player_name}}</td>
+                <td>{{r.wl}}</td>
+                <td>{{r.kd}}</td>
+                <td>{{r.hs}}</td>
+                <td>
+                    <div class="container">
+                        <div class="form">
+                            <div class="field">
+                                <div class="control">
+                                    <div class="select">
+                                        <select v-model="inputid" v-on:change="set_teamid(r._idx)">
+                                                <option value="" disabled selected hidden>Select Team</option>
+                                                <option value="[[=team1id]]">{{team1_name}}</option>
+                                                <option value="[[=team2id]]">{{team2_name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td><span @click="delete_player(r._idx, 0)" class="icon is-clickable is-pulled-left has-text-danger"> <i class="fa fa-remove fa-2x"></i></span></td>
+            </tr>
+        </table>
+        <button v-if="add_mode === false" @click="set_add_mode(true)" class="button is-success">
+            <i class="fa fa-plus fa-fw"></i> Add Player
+        </button>
+        <a class="button is-danger" href="[[=URL('index')]]">
+            <span>Back</span>
+        </a>
+        <a class="button is-success is-pulled-right" href="[[=URL('live_match', game_id, signer=url_signer)]]">
+            <p>Confirm Match</p>
+        </a>
+    </div>
+</div>
+
+[[block page_scripts]]
+<script>
+    let load_players_url = "[[=XML(load_players_url)]]";
+    let add_player_url = "[[=XML(add_player_url)]]";
+    let delete_player_url = "[[=XML(delete_player_url)]]";
+    let pop_player_url = "[[=XML(pop_player_url)]]";
+    let update_player_url = "[[=XML(update_player_url)]]";
+    let fetch_player_url = "[[=XML(fetch_player_url)]]";
+    let game_id = "[[=game_id]]";
+    let team1id = "[[=team1id]]";
+    let team2id = "[[=team2id]]";
+    let edit_tname_url = "[[=XML(edit_tname_url)]]";
+    let team1name = "[[=team1name]]";
+    let team2name = "[[=team2name]]";
+</script>
+<script src="js/index.js"></script>
+[[end]]
